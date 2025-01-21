@@ -18,9 +18,6 @@
 
 2차원 세계에 블록이 쌓여있다. 비가 오면 블록 사이에 빗물이 고인다.
 
-https://onlinejudgeimages.s3-ap-northeast-1.amazonaws.com/problem/14719/1.png![image](https://github.com/user-attachments/assets/bd108d70-310f-44fa-b201-a183fb09225b)
-https://onlinejudgeimages.s3-ap-northeast-1.amazonaws.com/problem/14719/2.png![image](https://github.com/user-attachments/assets/0ac6bbc9-b9a0-4abf-b09a-559724c3b008)
-
 비는 충분히 많이 온다. 고이는 빗물의 총량은 얼마일까?
 
 ### 입력

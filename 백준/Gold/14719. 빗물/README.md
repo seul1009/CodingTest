@@ -1,6 +1,6 @@
 # [Gold V] 빗물 - 14719
 
-[문제 링크](https://www.acmicpc.net/problem/12865) 
+[문제 링크]((https://www.acmicpc.net/problem/14719)) 
 
 ### 성능 요약
 

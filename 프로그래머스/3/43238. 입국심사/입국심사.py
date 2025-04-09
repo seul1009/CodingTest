@@ -4,7 +4,7 @@ def solution(n, times):
     while left <= right:
         mid = (left + right) // 2
         
-        cnt = 0
+        cnt = 0 # mid 시간 내에 심사 가능한 사람 수
         for time in times:
             cnt += mid // time
             
@@ -12,10 +12,9 @@ def solution(n, times):
                 break
         
         if cnt >= n:
-            answer = mid
             right = mid - 1
             
         elif cnt < n:
             left = mid + 1
             
-    return answer
+    return left

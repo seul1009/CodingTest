@@ -1,56 +1,69 @@
 import sys
+import copy
+from collections import deque
+ 
 input = sys.stdin.readline
-
-n, m = map(int, input().split())
-lab = [list(map(int, input().split())) for _ in range(n)]
-temp = [[0] * m for i in range(n)] # 복사용
-
+ 
+N, M = map(int, input().split())
+lab = [list(map(int, input().split())) for _ in range(N)]
+ 
 dx = [-1, 1, 0, 0]
 dy = [0, 0, -1, 1]
-
-result = 0
-
-# 바이러스 확산
-def virus(x, y):
-    for i in range(4):
-        nx, ny = x + dx[i], y + dy[i]
-        if 0 <= nx < n and 0 <= ny < m:
-            if temp[nx][ny] == 0:
-                temp[nx][ny] = 2
-                virus(nx, ny)
-
-# 안전영역 개수
-def get_score():
-    score = 0
-    for i in range(n):
-        for j in range(m):
-            if temp[i][j] == 0:
-                score += 1
-    return score
-
-# 벽 3개 세우기, 안전영역 계산
-def dfs(count):
-    global result
-    if count == 3:
-        for i in range(n):
-            for j in range(m):
-                temp[i][j] = lab[i][j]
-
-        # 모든 바이러스 위치에서 확산
-        for i in range(n):
-            for j in range(m):
-                if temp[i][j] == 2:
-                    virus(i, j)
-
-        # 안전영역 계산
-        result = max(result, get_score())
-        return
-
-    for i in range(n):
-        for j in range(m):
+ 
+ 
+def find_spaces(lab):
+    empty_spaces = []
+    for i in range(len(lab)):
+        for j in range(len(lab[i])):
             if lab[i][j] == 0:
-                lab[i][j] = 1
-                dfs(count + 1)
-                lab[i][j] = 0  # 백트래킹 (벽 제거)
-dfs(0)
+                empty_spaces.append((i, j))
+    return empty_spaces
+ 
+ 
+def bfs():
+    queue = deque()
+ 
+    temp_lab = copy.deepcopy(lab)
+ 
+    for i in range(N):
+        for j in range(M):
+            if temp_lab[i][j] == 2:
+                queue.append((i, j))
+ 
+    while queue:
+        x, y = queue.popleft()
+ 
+        for i in range(4):
+            nx = x + dx[i]
+            ny = y + dy[i]
+ 
+            # 범위를 벗어나면 무시
+            if nx < 0 or ny < 0 or nx >= N or ny >= M:
+                continue
+ 
+            # 0인 경우 바이러스 퍼트림
+            if temp_lab[nx][ny] == 0:
+                temp_lab[nx][ny] = 2
+                queue.append((nx, ny))
+ 
+    cnt = 0
+ 
+    for i in range(N):
+        cnt += temp_lab[i].count(0)
+ 
+    return cnt
+ 
+ 
+empty_spaces = find_spaces(lab)
+ 
+result = 0
+for i in range(len(empty_spaces)):
+    for j in range(i + 1, len(empty_spaces)):
+        for k in range(j + 1, len(empty_spaces)):
+            a, b, c = [empty_spaces[i], empty_spaces[j], empty_spaces[k]]
+            lab[a[0]][a[1]], lab[b[0]][b[1]], lab[c[0]][c[1]] = 1, 1, 1
+            cnt = bfs()
+            result = max(result, cnt)
+            lab[a[0]][a[1]], lab[b[0]][b[1]], lab[c[0]][c[1]] = 0, 0, 0
+ 
 print(result)

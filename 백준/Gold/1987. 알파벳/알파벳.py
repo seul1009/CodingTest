@@ -1,27 +1,32 @@
-def dfs(graph, v, already, depth):
-    global ans
-    # visited랑 알파벳의 already랑 겹치기 때문에 필요 없음
-
-    r, c = v
-    stack = set()
-    stack.add((r, c, already+graph[r][c], depth))
-
-    while stack:
-        nowr, nowc, nowalready, nowdepth = stack.pop()
-        ans = max(ans, nowdepth)
-        for i in range(4):
-            newr, newc = nowr+dr[i], nowc+dc[i]
-            if 0 <= newr < R and 0 <= newc < C and graph[newr][newc] not in nowalready:
-                stack.add((newr, newc, nowalready + graph[newr][newc], nowdepth+1))
-    return
+import sys
+input = sys.stdin.readline
 
 R, C = map(int, input().split())
-graph = [list(input()) for _ in range(R)]
+board = [list(input().strip()) for _ in range(R)]
 
-ans = 0
-dr = [0, 0, 1, -1]
-dc = [1, -1, 0, 0]
+dx = [-1, 1, 0, 0] 
+dy = [0, 0, -1, 1] 
 
-dfs(graph, (0, 0), '', 1)
+def bfs():
+    max_len = 0
+    queue = set()
+    queue.add((0, 0, board[0][0])) 
 
-print(ans)
+    while queue:
+        x, y, path = queue.pop()
+        max_len = max(max_len, len(path))
+        if max_len == 26:
+            return 26  # 최댓값이므로 즉시 반환
+
+        for i in range(4):
+            nx = x + dx[i]
+            ny = y + dy[i]
+
+            if 0 <= nx < R and 0 <= ny < C:
+                char = board[nx][ny]
+                if char not in path:
+                    queue.add((nx, ny, path + char))
+
+    return max_len
+
+print(bfs())

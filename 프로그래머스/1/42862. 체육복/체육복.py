@@ -6,7 +6,6 @@ def solution(n, lost, reserve):
         if i in lost:
             reserve.remove(i)
             lost.remove(i)
-        print(reserve)
             
     for i in reserve:
         if i-1 in lost:
